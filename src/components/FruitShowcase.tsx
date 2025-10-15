@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import FruitCanvas from "./FruitCanvas";
@@ -26,6 +26,31 @@ const fruits = [
 
 const FruitShowcase = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const section = document.getElementById("products");
+    if (section) {
+      observer.observe(section);
+    }
+
+    return () => {
+      if (section) {
+        observer.unobserve(section);
+      }
+    };
+  }, []);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? fruits.length - 1 : prev - 1));
@@ -36,13 +61,19 @@ const FruitShowcase = () => {
   };
 
   return (
-    <section id="products" className="min-h-screen py-20 relative">
+    <section id="products" className="min-h-screen py-20 relative backdrop-blur-sm bg-background/60">
       <div className="container mx-auto px-4">
-        <h2 className="text-5xl md:text-6xl font-bold text-center mb-16 text-primary">
+        <h2 
+          className={`text-5xl md:text-6xl font-bold text-center mb-16 text-primary transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
           Choose Your Fruit
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-700 delay-200 ${
+          isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
+        }`}>
           <div className="relative h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-secondary/50 to-background border border-border">
             <FruitCanvas currentFruit={fruits[currentIndex].model} className="w-full h-full" />
           </div>

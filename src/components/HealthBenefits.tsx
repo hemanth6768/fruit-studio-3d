@@ -21,7 +21,7 @@ const benefits = [
 const HealthBenefits = () => {
   return (
     <section id="about" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background backdrop-blur-sm" />
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-20">
