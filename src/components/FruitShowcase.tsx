@@ -74,7 +74,7 @@ const FruitShowcase = () => {
         <div className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-700 delay-200 ${
           isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
         }`}>
-          <div className="relative h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-secondary/50 to-background border border-border">
+          <div className="relative h-[500px]">
             <FruitCanvas currentFruit={fruits[currentIndex].model} className="w-full h-full" />
           </div>
 
