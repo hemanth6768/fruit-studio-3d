@@ -9,6 +9,7 @@ interface HeroFruitCanvasProps {
 
 const HeroFruitCanvas = ({ side }: HeroFruitCanvasProps) => {
   const [scrollY, setScrollY] = useState(0);
+  const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,9 +20,18 @@ const HeroFruitCanvas = ({ side }: HeroFruitCanvasProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Calculate rotation based on scroll
+  // Add continuous rotation animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation((prev) => prev + 0.01);
+    }, 16); // ~60fps
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate rotation based on scroll and auto-rotation
   const baseRotation = side === 'left' ? -0.3 : 0.3;
-  const scrollRotation = scrollY * 0.002;
+  const scrollRotation = scrollY * 0.003;
 
   return (
     <div className="w-full h-full">
@@ -33,11 +43,11 @@ const HeroFruitCanvas = ({ side }: HeroFruitCanvasProps) => {
         <spotLight position={[0, 10, 0]} intensity={0.8} />
         
         <Suspense fallback={null}>
-          <group rotation={[baseRotation + scrollRotation, scrollRotation, 0]}>
+          <group rotation={[baseRotation + scrollRotation, rotation + scrollRotation, scrollRotation * 0.5]}>
             <FruitModel 
-              modelPath={side === 'left' ? '/models/pomegranate.glb' : '/models/pear.glb'} 
-              scale={2.5} 
-              rotationSpeed={0.003}
+              modelPath={side === 'left' ? '/models/pomegranate.glb' : '/models/lychee.glb'} 
+              scale={2.8} 
+              rotationSpeed={0.008}
             />
           </group>
           <Environment preset="sunset" />
