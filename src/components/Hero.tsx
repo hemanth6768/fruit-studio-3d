@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { Suspense, lazy } from "react";
+
+const HeroFruitCanvas = lazy(() => import("./HeroFruitCanvas"));
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -26,14 +29,45 @@ const Hero = () => {
       
       {/* Parallax effect on scroll */}
       <div 
-        className="container mx-auto px-4 text-center relative z-10 animate-fade-in transition-transform duration-300"
+        className="container mx-auto px-4 relative z-10 animate-fade-in transition-transform duration-300"
         style={{ transform: `translateY(${scrollY * 0.3}px)` }}
       >
-        <div className="mb-6">
-          <h1 className="text-7xl md:text-9xl font-display font-black mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(217,255,0,0.6)] animate-pulse leading-tight">
-            PR AGRI FRESH
-          </h1>
-          <div className="h-2 w-48 mx-auto bg-gradient-to-r from-transparent via-primary to-transparent rounded-full" />
+        <div className="mb-6 flex items-center justify-center gap-4 lg:gap-8">
+          {/* Left Fruit */}
+          <div 
+            className="w-[250px] h-[350px] lg:w-[300px] lg:h-[400px] hidden md:block"
+            style={{ 
+              transform: `perspective(1000px) rotateY(${scrollY * 0.1}deg) rotateX(${-20 + scrollY * 0.05}deg)`,
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            <Suspense fallback={null}>
+              <HeroFruitCanvas side="left" />
+            </Suspense>
+          </div>
+
+          {/* Title Stack */}
+          <div className="text-center">
+            <h1 className="text-6xl md:text-7xl lg:text-9xl font-display font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(217,255,0,0.6)] leading-tight">
+              <div className="mb-2">PRA</div>
+              <div className="mb-2">AGRI</div>
+              <div>FRESH</div>
+            </h1>
+            <div className="h-2 w-48 mx-auto bg-gradient-to-r from-transparent via-primary to-transparent rounded-full mt-6" />
+          </div>
+
+          {/* Right Fruit */}
+          <div 
+            className="w-[250px] h-[350px] lg:w-[300px] lg:h-[400px] hidden md:block"
+            style={{ 
+              transform: `perspective(1000px) rotateY(${-scrollY * 0.1}deg) rotateX(${-20 + scrollY * 0.05}deg)`,
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            <Suspense fallback={null}>
+              <HeroFruitCanvas side="right" />
+            </Suspense>
+          </div>
         </div>
         
         <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground font-display tracking-tight">
