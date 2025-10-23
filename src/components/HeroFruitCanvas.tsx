@@ -20,9 +20,17 @@ const HeroFruitCanvas = ({ side }: HeroFruitCanvasProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Calculate rotation based on scroll - more visible rotation
-  const scrollRotation = scrollY * 0.005; // Increased for more visible scroll effect
-  const yRotation = scrollY * 0.008; // Strong Y-axis rotation on scroll
+  // Add continuous 360-degree rotation animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotation((prev) => (prev + 0.02) % (Math.PI * 2)); // Continuous 360° rotation
+    }, 16); // ~60fps
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Calculate additional rotation based on scroll
+  const scrollRotation = scrollY * 0.005;
 
   return (
     <div className="w-full h-full">
@@ -34,7 +42,7 @@ const HeroFruitCanvas = ({ side }: HeroFruitCanvasProps) => {
         <spotLight position={[0, 10, 0]} intensity={0.8} />
         
         <Suspense fallback={null}>
-          <group rotation={[scrollRotation * 0.3, yRotation, scrollRotation * 0.2]}>
+          <group rotation={[scrollRotation * 0.3, rotation + scrollRotation, scrollRotation * 0.2]}>
             <FruitModel 
               modelPath={side === 'left' ? '/models/pomegranate.glb' : '/models/lychee.glb'} 
               scale={3.5} 
