@@ -31,7 +31,7 @@ const Hero = () => {
       >
         <div className="mb-6">
           <h1 className="text-7xl md:text-9xl font-display font-black mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(217,255,0,0.6)] animate-pulse leading-tight">
-            FRESH FRUITS
+            PR AGRI FRESH
           </h1>
           <div className="h-2 w-48 mx-auto bg-gradient-to-r from-transparent via-primary to-transparent rounded-full" />
         </div>
