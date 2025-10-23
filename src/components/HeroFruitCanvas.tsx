@@ -46,8 +46,9 @@ const HeroFruitCanvas = ({ side }: HeroFruitCanvasProps) => {
           <group rotation={[baseRotation + scrollRotation, rotation + scrollRotation, scrollRotation * 0.5]}>
             <FruitModel 
               modelPath={side === 'left' ? '/models/pomegranate.glb' : '/models/lychee.glb'} 
-              scale={2.8} 
-              rotationSpeed={0.008}
+              scale={3.5} 
+              rotationSpeed={0.01}
+              simpleRotation={false}
             />
           </group>
           <Environment preset="sunset" />

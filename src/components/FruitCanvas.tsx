@@ -19,7 +19,7 @@ const FruitCanvas = ({ currentFruit, className = "" }: FruitCanvasProps) => {
         <spotLight position={[0, 10, 0]} intensity={0.8} />
         
         <Suspense fallback={null}>
-          <FruitModel modelPath={`/models/${currentFruit}.glb`} scale={2} rotationSpeed={0.005} />
+          <FruitModel modelPath={`/models/${currentFruit}.glb`} scale={2} rotationSpeed={0.005} simpleRotation={true} />
           <Environment preset="sunset" />
         </Suspense>
         
