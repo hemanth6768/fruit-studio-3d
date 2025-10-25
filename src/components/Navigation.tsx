@@ -1,31 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Menu } from "lucide-react";
 
 const Navigation = () => {
-  const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "Products", href: "#products" },
-    { name: "Events", href: "#events" },
-    { name: "Blogs", href: "#blogs" },
-    { name: "About", href: "#about" },
-    { name: "Contact Us", href: "#contact" },
-  ];
-
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-secondary/80 backdrop-blur-md rounded-full px-4 py-2 border border-border">
-      <ul className="flex items-center gap-2">
-        {navItems.map((item, index) => (
-          <li key={item.name}>
-            <Button
-              variant={index === 0 ? "default" : "ghost"}
-              size="sm"
-              className={index === 0 ? "rounded-full" : "rounded-full text-foreground hover:text-primary"}
-              asChild
-            >
-              <a href={item.href}>{item.name}</a>
-            </Button>
-          </li>
-        ))}
-      </ul>
+    <nav className="fixed top-6 left-6 z-50">
+      <SidebarTrigger className="bg-secondary/90 backdrop-blur-md hover:bg-secondary border border-border/50 rounded-full p-3 shadow-lg hover:shadow-xl transition-all hover:scale-105">
+        <Menu className="h-5 w-5 text-foreground" />
+      </SidebarTrigger>
     </nav>
   );
 };
