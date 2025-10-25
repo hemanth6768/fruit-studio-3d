@@ -1,5 +1,5 @@
 import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
+import ScrollOrbitHero from "@/components/ScrollOrbitHero";
 import FruitShowcase from "@/components/FruitShowcase";
 import HealthBenefits from "@/components/HealthBenefits";
 import Contact from "@/components/Contact";
@@ -21,7 +21,7 @@ const Index = () => {
       {/* Main Content */}
       <div className="relative z-10">
         <Navigation />
-        <Hero />
+        <ScrollOrbitHero />
         <FruitShowcase />
         <HealthBenefits />
         <Contact />
