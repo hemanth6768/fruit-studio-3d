@@ -34,35 +34,31 @@ const OrbitingFruit = ({
 
   useFrame(({ clock }) => {
     if (meshRef.current) {
-      const time = clock.getElapsedTime() * orbitSpeed;
-      const angle = time + angleOffset;
+      const time = clock.getElapsedTime();
+      const angle = time * orbitSpeed + angleOffset;
       
-      // Phase 1 (0-0.15): Fruits blast outward from center (revealing title)
-      const blastProgress = Math.min(scrollProgress / 0.15, 1);
-      const blastRadius = (1 - blastProgress) * 3; // Start close, blast to orbit position
+      // Initial load animation (first 1.5 seconds) - blast from center
+      const loadTime = Math.min(time / 1.5, 1);
+      const blastProgress = Math.pow(loadTime, 0.7); // Smooth ease out
       
-      // Phase 2 (0.15-0.6): Orbit around title
-      const orbitProgress = Math.max(0, Math.min((scrollProgress - 0.15) / 0.45, 1));
-      const currentRadius = orbitRadius * Math.max(blastProgress, orbitProgress);
-      
-      // Phase 3 (0.6-1.0): Smash effect - fruits collapse and explode
+      // Scroll-based smash effect (0.6-1.0)
       const smashProgress = Math.max(0, (scrollProgress - 0.6) / 0.4);
       const smashDistance = smashProgress * 20;
       const smashIntensity = Math.pow(smashProgress, 2);
       
-      // Calculate position - start clustered, blast out, then orbit, then smash
-      const targetRadius = currentRadius - blastRadius + smashDistance;
+      // Calculate position - blast from center on load, orbit, then smash on scroll
+      const targetRadius = orbitRadius * blastProgress + smashDistance;
       const x = Math.cos(angle) * targetRadius;
       const y = Math.sin(angle) * targetRadius * 0.5 - smashIntensity * 8;
       const z = zOffset + Math.sin(angle * 2) * 2 - smashProgress * 15;
       
       meshRef.current.position.set(x, y, z);
       
-      // Scale: start small during blast, grow to full, then shrink on smash
-      const blastScale = blastProgress * scale;
-      meshRef.current.scale.setScalar(blastScale * (1 - smashIntensity * 0.95));
+      // Scale: grow during blast, shrink during smash
+      const currentScale = blastProgress * scale;
+      meshRef.current.scale.setScalar(currentScale * (1 - smashIntensity * 0.95));
       
-      // Rotation - faster during blast and smash
+      // Rotation - faster during initial blast and smash
       const rotationSpeed = 1 + (1 - blastProgress) * 2 + smashProgress * 3;
       meshRef.current.rotation.x = time * 0.5 * rotationSpeed;
       meshRef.current.rotation.y = time * 0.7 * rotationSpeed;
@@ -73,7 +69,7 @@ const OrbitingFruit = ({
           if (child instanceof THREE.Mesh && child.material) {
             const material = child.material as THREE.MeshStandardMaterial;
             material.transparent = true;
-            // Fade in during blast, fade out during smash
+            // Fade in during blast, stay visible, fade out during smash
             material.opacity = Math.min(blastProgress, 1 - Math.pow(smashProgress, 1.5));
           }
         });
@@ -127,6 +123,25 @@ const Scene = ({ scrollProgress }: { scrollProgress: number }) => {
 const ScrollOrbitHero = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [loadProgress, setLoadProgress] = useState(0);
+
+  // Initial load animation
+  useEffect(() => {
+    const startTime = Date.now();
+    const duration = 1500; // 1.5 seconds
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      setLoadProgress(Math.pow(progress, 0.7)); // Ease out
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+    
+    requestAnimationFrame(animate);
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -150,11 +165,10 @@ const ScrollOrbitHero = () => {
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Title fades in as fruits blast outward (0-0.2), then fades out at end (0.7-1.0)
-  const titleBlastIn = Math.min(scrollProgress / 0.2, 1);
+  // Title appears on load, fades out on scroll (0.7-1.0)
   const titleFadeOut = scrollProgress < 0.7 ? 1 : 1 - (scrollProgress - 0.7) / 0.3;
-  const titleOpacity = titleBlastIn * titleFadeOut;
-  const titleScale = 0.8 + (titleBlastIn * 0.2) - (scrollProgress * 0.15);
+  const titleOpacity = loadProgress * titleFadeOut;
+  const titleScale = 0.8 + (loadProgress * 0.2) - (scrollProgress * 0.15);
 
   return (
     <section 
