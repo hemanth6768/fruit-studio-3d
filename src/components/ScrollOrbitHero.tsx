@@ -37,41 +37,44 @@ const OrbitingFruit = ({
       const time = clock.getElapsedTime() * orbitSpeed;
       const angle = time + angleOffset;
       
-      // Phase 1 (0-0.2): Emerge from background
-      const emergeProgress = Math.min(scrollProgress / 0.2, 1);
-      const emergeScale = emergeProgress * scale;
+      // Phase 1 (0-0.15): Fruits blast outward from center (revealing title)
+      const blastProgress = Math.min(scrollProgress / 0.15, 1);
+      const blastRadius = (1 - blastProgress) * 3; // Start close, blast to orbit position
       
-      // Phase 2 (0.2-0.6): Orbit around title
-      const orbitProgress = Math.max(0, Math.min((scrollProgress - 0.2) / 0.4, 1));
-      const currentRadius = orbitRadius * orbitProgress;
+      // Phase 2 (0.15-0.6): Orbit around title
+      const orbitProgress = Math.max(0, Math.min((scrollProgress - 0.15) / 0.45, 1));
+      const currentRadius = orbitRadius * Math.max(blastProgress, orbitProgress);
       
       // Phase 3 (0.6-1.0): Smash effect - fruits collapse and explode
       const smashProgress = Math.max(0, (scrollProgress - 0.6) / 0.4);
       const smashDistance = smashProgress * 20;
-      const smashIntensity = Math.pow(smashProgress, 2); // Accelerate the smash
+      const smashIntensity = Math.pow(smashProgress, 2);
       
-      // Calculate position with violent scatter
-      const x = Math.cos(angle) * (currentRadius + smashDistance);
-      const y = Math.sin(angle) * (currentRadius + smashDistance) * 0.5 - smashIntensity * 8;
+      // Calculate position - start clustered, blast out, then orbit, then smash
+      const targetRadius = currentRadius - blastRadius + smashDistance;
+      const x = Math.cos(angle) * targetRadius;
+      const y = Math.sin(angle) * targetRadius * 0.5 - smashIntensity * 8;
       const z = zOffset + Math.sin(angle * 2) * 2 - smashProgress * 15;
       
       meshRef.current.position.set(x, y, z);
-      // Dramatic scale down for smash effect
-      meshRef.current.scale.setScalar(emergeScale * (1 - smashIntensity * 0.95));
       
-      // Rotation - faster during smash
-      const rotationSpeed = 1 + smashProgress * 3;
+      // Scale: start small during blast, grow to full, then shrink on smash
+      const blastScale = blastProgress * scale;
+      meshRef.current.scale.setScalar(blastScale * (1 - smashIntensity * 0.95));
+      
+      // Rotation - faster during blast and smash
+      const rotationSpeed = 1 + (1 - blastProgress) * 2 + smashProgress * 3;
       meshRef.current.rotation.x = time * 0.5 * rotationSpeed;
       meshRef.current.rotation.y = time * 0.7 * rotationSpeed;
       
-      // Opacity for smash fade out
+      // Opacity
       if (meshRef.current.children[0]) {
         meshRef.current.traverse((child) => {
           if (child instanceof THREE.Mesh && child.material) {
             const material = child.material as THREE.MeshStandardMaterial;
             material.transparent = true;
-            // Accelerated fade during smash
-            material.opacity = 1 - Math.pow(smashProgress, 1.5);
+            // Fade in during blast, fade out during smash
+            material.opacity = Math.min(blastProgress, 1 - Math.pow(smashProgress, 1.5));
           }
         });
       }
@@ -147,8 +150,11 @@ const ScrollOrbitHero = () => {
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const titleOpacity = scrollProgress < 0.7 ? 1 : 1 - (scrollProgress - 0.7) / 0.3;
-  const titleScale = 1 - scrollProgress * 0.2;
+  // Title fades in as fruits blast outward (0-0.2), then fades out at end (0.7-1.0)
+  const titleBlastIn = Math.min(scrollProgress / 0.2, 1);
+  const titleFadeOut = scrollProgress < 0.7 ? 1 : 1 - (scrollProgress - 0.7) / 0.3;
+  const titleOpacity = titleBlastIn * titleFadeOut;
+  const titleScale = 0.8 + (titleBlastIn * 0.2) - (scrollProgress * 0.15);
 
   return (
     <section 
@@ -170,14 +176,13 @@ const ScrollOrbitHero = () => {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/60 pointer-events-none" />
 
-        {/* Title - Fixed in center with cinematic entrance */}
+        {/* Title - Revealed by fruit blast */}
         <div 
           className="absolute inset-0 flex items-center justify-center z-10"
           style={{
             opacity: titleOpacity,
             transform: `scale(${titleScale})`,
-            filter: scrollProgress < 0.15 ? `blur(${(0.15 - scrollProgress) * 40}px)` : 'blur(0px)',
-            transition: 'opacity 0.1s ease-out, transform 0.1s ease-out, filter 0.2s ease-out'
+            transition: 'opacity 0.1s ease-out, transform 0.1s ease-out'
           }}
         >
           <div className="text-center px-4">
