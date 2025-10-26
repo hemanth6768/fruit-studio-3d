@@ -10,13 +10,14 @@ interface FruitCanvasProps {
 
 const FruitCanvas = ({ currentFruit, className = "" }: FruitCanvasProps) => {
   return (
-    <div className={className}>
+    <div className={`${className} rounded-2xl overflow-hidden bg-gradient-to-br from-background/40 to-background/20 backdrop-blur-sm`}>
       <Canvas>
         <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
-        <directionalLight position={[-10, -10, -5]} intensity={0.5} />
-        <spotLight position={[0, 10, 0]} intensity={0.8} />
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[10, 10, 5]} intensity={2} />
+        <directionalLight position={[-10, -10, -5]} intensity={1} />
+        <directionalLight position={[0, -10, 5]} intensity={1} />
+        <spotLight position={[0, 10, 0]} intensity={1.5} />
         
         <Suspense fallback={null}>
           <FruitModel modelPath={`/models/${currentFruit}.glb`} scale={2} rotationSpeed={0.005} simpleRotation={true} />
