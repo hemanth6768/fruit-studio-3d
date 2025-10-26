@@ -45,29 +45,33 @@ const OrbitingFruit = ({
       const orbitProgress = Math.max(0, Math.min((scrollProgress - 0.2) / 0.4, 1));
       const currentRadius = orbitRadius * orbitProgress;
       
-      // Phase 3 (0.6-1.0): Scatter and fade
-      const scatterProgress = Math.max(0, (scrollProgress - 0.6) / 0.4);
-      const scatterDistance = scatterProgress * 15;
+      // Phase 3 (0.6-1.0): Smash effect - fruits collapse and explode
+      const smashProgress = Math.max(0, (scrollProgress - 0.6) / 0.4);
+      const smashDistance = smashProgress * 20;
+      const smashIntensity = Math.pow(smashProgress, 2); // Accelerate the smash
       
-      // Calculate position
-      const x = Math.cos(angle) * (currentRadius + scatterDistance);
-      const y = Math.sin(angle) * (currentRadius + scatterDistance) * 0.5;
-      const z = zOffset + Math.sin(angle * 2) * 2 - scatterProgress * 10;
+      // Calculate position with violent scatter
+      const x = Math.cos(angle) * (currentRadius + smashDistance);
+      const y = Math.sin(angle) * (currentRadius + smashDistance) * 0.5 - smashIntensity * 8;
+      const z = zOffset + Math.sin(angle * 2) * 2 - smashProgress * 15;
       
       meshRef.current.position.set(x, y, z);
-      meshRef.current.scale.setScalar(emergeScale * (1 - scatterProgress * 0.8));
+      // Dramatic scale down for smash effect
+      meshRef.current.scale.setScalar(emergeScale * (1 - smashIntensity * 0.95));
       
-      // Rotation
-      meshRef.current.rotation.x = time * 0.5;
-      meshRef.current.rotation.y = time * 0.7;
+      // Rotation - faster during smash
+      const rotationSpeed = 1 + smashProgress * 3;
+      meshRef.current.rotation.x = time * 0.5 * rotationSpeed;
+      meshRef.current.rotation.y = time * 0.7 * rotationSpeed;
       
-      // Opacity for fade out
+      // Opacity for smash fade out
       if (meshRef.current.children[0]) {
         meshRef.current.traverse((child) => {
           if (child instanceof THREE.Mesh && child.material) {
             const material = child.material as THREE.MeshStandardMaterial;
             material.transparent = true;
-            material.opacity = 1 - scatterProgress;
+            // Accelerated fade during smash
+            material.opacity = 1 - Math.pow(smashProgress, 1.5);
           }
         });
       }
@@ -176,7 +180,7 @@ const ScrollOrbitHero = () => {
           }}
         >
           <div className="text-center px-4">
-            <h1 className="text-6xl md:text-8xl lg:text-[12rem] font-display font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(217,255,0,0.8)] leading-[0.9] mb-8">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent drop-shadow-[0_0_40px_rgba(217,255,0,0.8)] leading-[0.9] mb-8">
               <div className="mb-4">PARA</div>
               <div className="mb-4">AGRI</div>
               <div>FRESH</div>
