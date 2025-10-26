@@ -88,11 +88,11 @@ const OrbitingFruit = ({
 const Scene = ({ scrollProgress }: { scrollProgress: number }) => {
   const fruits = [
     { model: "/models/pomegranate.glb", radius: 6, speed: 0.3, angle: 0, z: 2, scale: 2.5 },
-    { model: "/models/lychee.glb", radius: 7, speed: 0.25, angle: Math.PI / 3, z: -1, scale: 2.2 },
+    { model: "/models/lychee.glb", radius: 7, speed: -0.25, angle: Math.PI / 3, z: -1, scale: 2.2 },
     { model: "/models/pear.glb", radius: 6.5, speed: 0.28, angle: Math.PI * 2 / 3, z: 3, scale: 2.3 },
-    { model: "/models/pomegranate.glb", radius: 7.5, speed: 0.22, angle: Math.PI, z: -2, scale: 2.0 },
+    { model: "/models/pomegranate.glb", radius: 7.5, speed: -0.22, angle: Math.PI, z: -2, scale: 2.0 },
     { model: "/models/lychee.glb", radius: 6.8, speed: 0.26, angle: Math.PI * 4 / 3, z: 1, scale: 2.4 },
-    { model: "/models/pear.glb", radius: 7.2, speed: 0.24, angle: Math.PI * 5 / 3, z: -3, scale: 2.1 },
+    { model: "/models/pear.glb", radius: 7.2, speed: -0.24, angle: Math.PI * 5 / 3, z: -3, scale: 2.1 },
   ];
 
   return (
@@ -170,13 +170,14 @@ const ScrollOrbitHero = () => {
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/60 pointer-events-none" />
 
-        {/* Title - Fixed in center */}
+        {/* Title - Fixed in center with cinematic entrance */}
         <div 
           className="absolute inset-0 flex items-center justify-center z-10"
           style={{
             opacity: titleOpacity,
             transform: `scale(${titleScale})`,
-            transition: 'opacity 0.1s ease-out, transform 0.1s ease-out'
+            filter: scrollProgress < 0.15 ? `blur(${(0.15 - scrollProgress) * 40}px)` : 'blur(0px)',
+            transition: 'opacity 0.1s ease-out, transform 0.1s ease-out, filter 0.2s ease-out'
           }}
         >
           <div className="text-center px-4">
