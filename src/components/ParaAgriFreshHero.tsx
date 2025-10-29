@@ -3,6 +3,9 @@ import { useGLTF, PerspectiveCamera, Environment } from "@react-three/drei";
 import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { Button } from "./ui/button";
+import orange1 from "/images/orange1.png";
+import orange2 from "/images/orange2.png";
+import orange3 from "/images/orange3.png";
 
 interface FlyingFruitProps {
   modelPath: string;
@@ -179,8 +182,50 @@ const ParaAgriFreshHero = () => {
         </Canvas>
       </div>
 
+      {/* Animated Orange Images */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Orange 1 - Top Left */}
+        <img 
+          src={orange1} 
+          alt="Fresh Orange"
+          className={`absolute top-[10%] left-[8%] w-32 md:w-48 transition-all duration-1000 ${
+            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-0'
+          }`}
+          style={{
+            animation: showText ? 'float 6s ease-in-out infinite, rotate 20s linear infinite' : 'none',
+            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.3))'
+          }}
+        />
+        
+        {/* Orange 2 - Top Right */}
+        <img 
+          src={orange2} 
+          alt="Sliced Orange"
+          className={`absolute top-[15%] right-[10%] w-28 md:w-40 transition-all duration-1000 delay-300 ${
+            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-0'
+          }`}
+          style={{
+            animation: showText ? 'float 7s ease-in-out infinite 1s, rotate 15s linear infinite reverse' : 'none',
+            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.3))'
+          }}
+        />
+        
+        {/* Orange 3 - Bottom */}
+        <img 
+          src={orange3} 
+          alt="Orange with Leaves"
+          className={`absolute bottom-[15%] left-[15%] w-36 md:w-52 transition-all duration-1000 delay-500 ${
+            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-0'
+          }`}
+          style={{
+            animation: showText ? 'float 8s ease-in-out infinite 1.5s, rotate 18s linear infinite' : 'none',
+            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.3))'
+          }}
+        />
+      </div>
+
       {/* Brand Text with Glow Effect */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
         <div 
           className={`text-center transition-all duration-1000 ${
             showText ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
