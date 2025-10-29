@@ -44,6 +44,11 @@ All colors MUST be HSL.
 
     --shadow-glow: 0 0 60px hsl(75 100% 65% / 0.4);
     --shadow-strong: 0 20px 60px hsl(75 100% 65% / 0.25);
+    
+    /* Para Agri Fresh Theme */
+    --agri-green-start: 142 76% 36%;
+    --agri-green-end: 158 64% 52%;
+    --agri-glow: 142 76% 36%;
   }
 }
 
