@@ -151,13 +151,6 @@ const Scene = () => {
         delay={1.6}
         rotationAxis="y"
       />
-      <FlyingFruit 
-        modelPath="/models/lychee.glb" 
-        startPos={[10, -10, 12]} 
-        endPos={[2, -3, 8]} 
-        delay={2.2}
-        rotationAxis="z"
-      />
 
       {/* Background slowly rotating fruits */}
       <BackgroundFruit 
