@@ -4,6 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { Button } from "./ui/button";
 import orange1 from "/images/orange1.png";
+import apple1 from "/images/apple1.png";
+import apple2 from "/images/apple2.png";
 
 interface FlyingFruitProps {
   modelPath: string;
@@ -115,13 +117,6 @@ const Scene = () => {
         rotationAxis="y"
       />
       <FlyingFruit 
-        modelPath="/models/lychee.glb" 
-        startPos={[-12, -10, 10]} 
-        endPos={[-5, -3, 2]} 
-        delay={1.5}
-        rotationAxis="z"
-      />
-      <FlyingFruit 
         modelPath="/models/pomegranate.glb" 
         startPos={[18, 5, 15]} 
         endPos={[5, 1, 3]} 
@@ -215,9 +210,9 @@ const ParaAgriFreshHero = () => {
         </Canvas>
       </div>
 
-      {/* Animated Orange Image with Depth & Parallax */}
+      {/* Animated Fruit Images with Depth & Parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Orange - Top Right (Single orange with depth) */}
+        {/* Orange - Top Right */}
         <img 
           src={orange1} 
           alt="Fresh Orange"
@@ -228,6 +223,36 @@ const ParaAgriFreshHero = () => {
             animation: showText ? 'float 6s ease-in-out infinite, rotate 20s linear infinite' : 'none',
             filter: 'drop-shadow(0 15px 40px rgba(255, 140, 0, 0.5)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3)) brightness(1.1) contrast(1.05)',
             transform: showText ? `translate(${mousePos.x * 25}px, ${mousePos.y * 25}px)` : undefined,
+            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+        />
+        
+        {/* Apple 1 - Top Left (Flying in from left) */}
+        <img 
+          src={apple1} 
+          alt="Fresh Red Apple"
+          className={`absolute top-[15%] left-[10%] w-28 md:w-44 transition-all duration-[1800ms] ${
+            showText ? 'opacity-100 scale-100' : 'opacity-0 scale-50 -translate-x-full -translate-y-full'
+          }`}
+          style={{
+            animation: showText ? 'float 7s ease-in-out infinite 0.5s, rotate 18s linear infinite' : 'none',
+            filter: 'drop-shadow(0 12px 35px rgba(220, 20, 60, 0.5)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3)) brightness(1.08) contrast(1.04)',
+            transform: showText ? `translate(${mousePos.x * 22}px, ${mousePos.y * 22}px)` : undefined,
+            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+        />
+        
+        {/* Apple 2 - Bottom Center (Sliced apple) */}
+        <img 
+          src={apple2} 
+          alt="Sliced Apple"
+          className={`absolute bottom-[20%] left-[50%] -translate-x-1/2 w-32 md:w-48 transition-all duration-[2000ms] delay-400 ${
+            showText ? 'opacity-95 scale-100' : 'opacity-0 scale-50 translate-y-full rotate-180'
+          }`}
+          style={{
+            animation: showText ? 'float 6.5s ease-in-out infinite 1s, rotate 16s linear infinite reverse' : 'none',
+            filter: 'drop-shadow(0 10px 30px rgba(220, 20, 60, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25)) brightness(1.06) contrast(1.03) blur(0.2px)',
+            transform: showText ? `translate(calc(-50% + ${mousePos.x * 18}px), ${mousePos.y * 18}px)` : undefined,
             transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         />
