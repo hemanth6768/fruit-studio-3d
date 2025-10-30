@@ -131,28 +131,28 @@ const Scene = () => {
 
       {/* Flying apples coming towards viewer near title */}
       <FlyingFruit 
-        modelPath="/models/apple.glb" 
+        modelPath="/models/apple.gltf" 
         startPos={[-10, 12, -10]} 
         endPos={[-2, 3, 5]} 
         delay={0.8}
         rotationAxis="z"
       />
       <FlyingFruit 
-        modelPath="/models/apple.glb" 
+        modelPath="/models/apple.gltf" 
         startPos={[12, 10, -12]} 
         endPos={[3, 2, 6]} 
         delay={1.2}
         rotationAxis="x"
       />
       <FlyingFruit 
-        modelPath="/models/apple.glb" 
+        modelPath="/models/apple.gltf" 
         startPos={[-8, -12, 15]} 
         endPos={[-3, -2, 7]} 
         delay={1.6}
         rotationAxis="y"
       />
       <FlyingFruit 
-        modelPath="/models/apple.glb" 
+        modelPath="/models/apple.gltf" 
         startPos={[10, -10, 12]} 
         endPos={[2, -3, 8]} 
         delay={2.2}
