@@ -158,11 +158,23 @@ const Scene = () => {
 
 const ParaAgriFreshHero = () => {
   const [showText, setShowText] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     // Show text after initial fruit blast
     const timer = setTimeout(() => setShowText(true), 2500);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const scrollToProducts = () => {
@@ -182,44 +194,50 @@ const ParaAgriFreshHero = () => {
         </Canvas>
       </div>
 
-      {/* Animated Orange Images */}
+      {/* Animated Orange Images with Depth & Parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Orange 1 - Top Left */}
+        {/* Orange 1 - Top Left (Closest - No blur) */}
         <img 
           src={orange1} 
           alt="Fresh Orange"
-          className={`absolute top-[10%] left-[8%] w-32 md:w-48 transition-all duration-1000 ${
-            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-0'
+          className={`absolute top-[10%] left-[8%] w-32 md:w-48 transition-all duration-[1500ms] ${
+            showText ? 'opacity-100 scale-100' : 'opacity-0 scale-50 -translate-x-full -translate-y-full'
           }`}
           style={{
             animation: showText ? 'float 6s ease-in-out infinite, rotate 20s linear infinite' : 'none',
-            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.3))'
+            filter: 'drop-shadow(0 15px 40px rgba(255, 140, 0, 0.5)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3)) brightness(1.1) contrast(1.05)',
+            transform: showText ? `translate(${mousePos.x * 25}px, ${mousePos.y * 25}px)` : undefined,
+            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         />
         
-        {/* Orange 2 - Top Right */}
+        {/* Orange 2 - Top Right (Middle depth - slight blur) */}
         <img 
           src={orange2} 
           alt="Sliced Orange"
-          className={`absolute top-[15%] right-[10%] w-28 md:w-40 transition-all duration-1000 delay-300 ${
-            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-0'
+          className={`absolute top-[15%] right-[10%] w-28 md:w-40 transition-all duration-[1800ms] delay-300 ${
+            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-50 translate-x-full -translate-y-full rotate-180'
           }`}
           style={{
             animation: showText ? 'float 7s ease-in-out infinite 1s, rotate 15s linear infinite reverse' : 'none',
-            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.3))'
+            filter: 'drop-shadow(0 12px 35px rgba(255, 140, 0, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25)) brightness(1.08) contrast(1.03) blur(0.3px)',
+            transform: showText ? `translate(${mousePos.x * 18}px, ${mousePos.y * 18}px)` : undefined,
+            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         />
         
-        {/* Orange 3 - Bottom */}
+        {/* Orange 3 - Bottom (Furthest - more blur for depth) */}
         <img 
           src={orange3} 
           alt="Orange with Leaves"
-          className={`absolute bottom-[15%] left-[15%] w-36 md:w-52 transition-all duration-1000 delay-500 ${
-            showText ? 'opacity-90 scale-100' : 'opacity-0 scale-0'
+          className={`absolute bottom-[15%] left-[15%] w-36 md:w-52 transition-all duration-[2100ms] delay-500 ${
+            showText ? 'opacity-80 scale-100' : 'opacity-0 scale-50 -translate-x-full translate-y-full rotate-[-180deg]'
           }`}
           style={{
             animation: showText ? 'float 8s ease-in-out infinite 1.5s, rotate 18s linear infinite' : 'none',
-            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.3))'
+            filter: 'drop-shadow(0 10px 30px rgba(255, 140, 0, 0.4)) drop-shadow(0 3px 10px rgba(0, 0, 0, 0.2)) brightness(1.05) contrast(1.02) blur(0.6px)',
+            transform: showText ? `translate(${mousePos.x * 12}px, ${mousePos.y * 12}px)` : undefined,
+            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
         />
       </div>
