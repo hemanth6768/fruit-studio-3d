@@ -87,7 +87,14 @@ const BackgroundFruit = ({ modelPath, position, orbitRadius, orbitSpeed }: Backg
 };
 
 // Hero Orange - Prominent rotating orange near title coming towards user
-const HeroOrange = () => {
+interface HeroOrangeProps {
+  position: [number, number, number];
+  scale: number;
+  rotationSpeed: number;
+  floatOffset: number;
+}
+
+const HeroOrange = ({ position, scale, rotationSpeed, floatOffset }: HeroOrangeProps) => {
   const meshRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/orange.glb');
 
@@ -97,16 +104,16 @@ const HeroOrange = () => {
     const time = state.clock.getElapsedTime();
     
     // Continuous rotation towards user
-    meshRef.current.rotation.y += 0.015; // Primary rotation
-    meshRef.current.rotation.x = Math.sin(time * 0.5) * 0.2; // Dynamic tilt
-    meshRef.current.rotation.z = Math.cos(time * 0.4) * 0.15; // Secondary wobble
+    meshRef.current.rotation.y += rotationSpeed; // Primary rotation
+    meshRef.current.rotation.x = Math.sin(time * 0.5 + floatOffset) * 0.25; // Dynamic tilt
+    meshRef.current.rotation.z = Math.cos(time * 0.4 + floatOffset) * 0.2; // Secondary wobble
     
     // Gentle floating motion
-    meshRef.current.position.y = 0.5 + Math.sin(time * 0.8) * 0.3;
-    meshRef.current.position.x = Math.sin(time * 0.6) * 0.2;
+    meshRef.current.position.y = position[1] + Math.sin(time * 0.8 + floatOffset) * 0.4;
+    meshRef.current.position.x = position[0] + Math.sin(time * 0.6 + floatOffset) * 0.3;
   });
 
-  return <primitive ref={meshRef} object={scene.clone()} scale={3.5} position={[0, 0.5, 8]} />;
+  return <primitive ref={meshRef} object={scene.clone()} scale={scale} position={[position[0], position[1], position[2]]} />;
 };
 
 const Scene = () => {
@@ -121,8 +128,19 @@ const Scene = () => {
       <spotLight position={[0, 15, 0]} intensity={1.2} angle={0.6} penumbra={1} color="#ffffff" />
       <pointLight position={[5, 0, 5]} intensity={0.6} color="#4ade80" />
       
-      {/* HERO ORANGE - Prominent rotating orange near title */}
-      <HeroOrange />
+      {/* HERO ORANGES - Two prominent rotating oranges near title */}
+      <HeroOrange 
+        position={[-2.5, 0.5, 7]} 
+        scale={5} 
+        rotationSpeed={0.018} 
+        floatOffset={0}
+      />
+      <HeroOrange 
+        position={[2.5, -0.5, 7.5]} 
+        scale={5.5} 
+        rotationSpeed={0.015} 
+        floatOffset={Math.PI}
+      />
 
       {/* Flying fruits entering from different angles - background only */}
       <FlyingFruit 
