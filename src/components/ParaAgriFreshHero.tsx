@@ -3,9 +3,6 @@ import { useGLTF, PerspectiveCamera, Environment } from "@react-three/drei";
 import { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { Button } from "./ui/button";
-import orange1 from "/images/orange1.png";
-import apple1 from "/images/apple1.png";
-import apple2 from "/images/apple2.png";
 
 interface FlyingFruitProps {
   modelPath: string;
@@ -127,49 +124,12 @@ const Scene = () => {
       {/* HERO ORANGE - Prominent rotating orange near title */}
       <HeroOrange />
 
-      {/* Flying fruits entering from different angles */}
-      <FlyingFruit 
-        modelPath="/models/pomegranate.glb" 
-        startPos={[-15, 8, -5]} 
-        endPos={[-4, 2, -2]} 
-        delay={0.5}
-        rotationAxis="x"
-      />
+      {/* Flying fruits entering from different angles - background only */}
       <FlyingFruit 
         modelPath="/models/pear.glb" 
         startPos={[15, -8, -8]} 
         endPos={[4, -2, -3]} 
         delay={1.0}
-        rotationAxis="y"
-      />
-      <FlyingFruit 
-        modelPath="/models/pomegranate.glb" 
-        startPos={[18, 5, 15]} 
-        endPos={[5, 1, 3]} 
-        delay={2.0}
-        rotationAxis="y"
-      />
-
-      {/* Flying apples coming towards viewer near title */}
-      <FlyingFruit 
-        modelPath="/models/apple.gltf" 
-        startPos={[-10, 12, -10]} 
-        endPos={[-2, 3, 5]} 
-        delay={0.8}
-        rotationAxis="z"
-      />
-      <FlyingFruit 
-        modelPath="/models/apple.gltf" 
-        startPos={[12, 10, -12]} 
-        endPos={[3, 2, 6]} 
-        delay={1.2}
-        rotationAxis="x"
-      />
-      <FlyingFruit 
-        modelPath="/models/apple.gltf" 
-        startPos={[-8, -12, 15]} 
-        endPos={[-3, -2, 7]} 
-        delay={1.6}
         rotationAxis="y"
       />
 
@@ -179,12 +139,6 @@ const Scene = () => {
         position={[-7, 4, -8]} 
         orbitRadius={0.5}
         orbitSpeed={0.2}
-      />
-      <BackgroundFruit 
-        modelPath="/models/lychee.glb" 
-        position={[8, -4, -10]} 
-        orbitRadius={0.6}
-        orbitSpeed={0.15}
       />
       <BackgroundFruit 
         modelPath="/models/pomegranate.glb" 
@@ -236,37 +190,8 @@ const ParaAgriFreshHero = () => {
         </Canvas>
       </div>
 
-      {/* Animated Fruit Images with Depth & Parallax */}
+      {/* Animated Fruit Images with Depth & Parallax - Removed */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Apple 1 - Top Left (Flying in from left) */}
-        <img 
-          src={apple1} 
-          alt="Fresh Red Apple"
-          className={`absolute top-[15%] left-[10%] w-28 md:w-44 transition-all duration-[1800ms] ${
-            showText ? 'opacity-100 scale-100' : 'opacity-0 scale-50 -translate-x-full -translate-y-full'
-          }`}
-          style={{
-            animation: showText ? 'float 7s ease-in-out infinite 0.5s, rotate 18s linear infinite' : 'none',
-            filter: 'drop-shadow(0 12px 35px rgba(220, 20, 60, 0.5)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3)) brightness(1.08) contrast(1.04)',
-            transform: showText ? `translate(${mousePos.x * 22}px, ${mousePos.y * 22}px)` : undefined,
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        />
-        
-        {/* Apple 2 - Bottom Center (Sliced apple) */}
-        <img 
-          src={apple2} 
-          alt="Sliced Apple"
-          className={`absolute bottom-[20%] left-[50%] -translate-x-1/2 w-32 md:w-48 transition-all duration-[2000ms] delay-400 ${
-            showText ? 'opacity-95 scale-100' : 'opacity-0 scale-50 translate-y-full rotate-180'
-          }`}
-          style={{
-            animation: showText ? 'float 6.5s ease-in-out infinite 1s, rotate 16s linear infinite reverse' : 'none',
-            filter: 'drop-shadow(0 10px 30px rgba(220, 20, 60, 0.45)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25)) brightness(1.06) contrast(1.03) blur(0.2px)',
-            transform: showText ? `translate(calc(-50% + ${mousePos.x * 18}px), ${mousePos.y * 18}px)` : undefined,
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        />
       </div>
 
       {/* Brand Text with Glow Effect */}
