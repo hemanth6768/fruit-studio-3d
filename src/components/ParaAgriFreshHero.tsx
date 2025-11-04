@@ -238,21 +238,6 @@ const ParaAgriFreshHero = () => {
 
       {/* Animated Fruit Images with Depth & Parallax */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Orange - Top Right */}
-        <img 
-          src={orange1} 
-          alt="Fresh Orange"
-          className={`absolute top-[12%] right-[8%] w-32 md:w-48 transition-all duration-[1500ms] ${
-            showText ? 'opacity-100 scale-100' : 'opacity-0 scale-50 translate-x-full -translate-y-full'
-          }`}
-          style={{
-            animation: showText ? 'float 6s ease-in-out infinite, rotate 20s linear infinite' : 'none',
-            filter: 'drop-shadow(0 15px 40px rgba(255, 140, 0, 0.5)) drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3)) brightness(1.1) contrast(1.05)',
-            transform: showText ? `translate(${mousePos.x * 25}px, ${mousePos.y * 25}px)` : undefined,
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          }}
-        />
-        
         {/* Apple 1 - Top Left (Flying in from left) */}
         <img 
           src={apple1} 
