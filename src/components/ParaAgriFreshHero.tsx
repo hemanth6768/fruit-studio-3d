@@ -89,6 +89,29 @@ const BackgroundFruit = ({ modelPath, position, orbitRadius, orbitSpeed }: Backg
   return <primitive ref={meshRef} object={scene.clone()} scale={1.2} />;
 };
 
+// Hero Orange - Prominent rotating orange near title coming towards user
+const HeroOrange = () => {
+  const meshRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF('/models/orange.glb');
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+
+    const time = state.clock.getElapsedTime();
+    
+    // Continuous rotation towards user
+    meshRef.current.rotation.y += 0.015; // Primary rotation
+    meshRef.current.rotation.x = Math.sin(time * 0.5) * 0.2; // Dynamic tilt
+    meshRef.current.rotation.z = Math.cos(time * 0.4) * 0.15; // Secondary wobble
+    
+    // Gentle floating motion
+    meshRef.current.position.y = 0.5 + Math.sin(time * 0.8) * 0.3;
+    meshRef.current.position.x = Math.sin(time * 0.6) * 0.2;
+  });
+
+  return <primitive ref={meshRef} object={scene.clone()} scale={3.5} position={[0, 0.5, 8]} />;
+};
+
 const Scene = () => {
   return (
     <>
@@ -100,6 +123,9 @@ const Scene = () => {
       <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#b8f0d4" />
       <spotLight position={[0, 15, 0]} intensity={1.2} angle={0.6} penumbra={1} color="#ffffff" />
       <pointLight position={[5, 0, 5]} intensity={0.6} color="#4ade80" />
+      
+      {/* HERO ORANGE - Prominent rotating orange near title */}
+      <HeroOrange />
 
       {/* Flying fruits entering from different angles */}
       <FlyingFruit 
