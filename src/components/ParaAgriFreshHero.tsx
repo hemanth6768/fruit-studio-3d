@@ -119,6 +119,45 @@ const OrbitingFruit = ({ modelPath, orbitRadius, orbitSpeed, startAngle, scale, 
   return <primitive ref={meshRef} object={scene.clone()} scale={scale} />;
 };
 
+// Falling Fruit - Moves horizontally across the screen
+interface FallingFruitProps {
+  modelPath: string;
+  startY: number;
+  speed: number;
+  scale: number;
+  delay: number;
+}
+
+const FallingFruit = ({ modelPath, startY, speed, scale, delay }: FallingFruitProps) => {
+  const meshRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF(modelPath);
+  const [started, setStarted] = useState(false);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+
+    const time = state.clock.getElapsedTime();
+    
+    // Start after delay
+    if (time > delay && !started) {
+      setStarted(true);
+    }
+
+    if (started) {
+      // Move horizontally from left to right
+      meshRef.current.position.x = ((time - delay) * speed) % 20 - 10;
+      meshRef.current.position.y = startY;
+      meshRef.current.position.z = 5;
+      
+      // Rotate as it moves
+      meshRef.current.rotation.y += 0.03;
+      meshRef.current.rotation.z = Math.sin(time * 0.5) * 0.2;
+    }
+  });
+
+  return <primitive ref={meshRef} object={scene.clone()} scale={scale} />;
+};
+
 const Scene = () => {
   return (
     <>
@@ -136,7 +175,7 @@ const Scene = () => {
         orbitRadius={4}
         orbitSpeed={0.3}
         startAngle={0}
-        scale={5}
+        scale={3}
         zPosition={7}
       />
       <OrbitingFruit 
@@ -144,8 +183,24 @@ const Scene = () => {
         orbitRadius={4}
         orbitSpeed={0.3}
         startAngle={Math.PI}
-        scale={5}
+        scale={3}
         zPosition={7}
+      />
+
+      {/* Falling fruits moving horizontally */}
+      <FallingFruit 
+        modelPath="/models/apple.glb"
+        startY={3}
+        speed={2}
+        scale={3}
+        delay={1}
+      />
+      <FallingFruit 
+        modelPath="/models/orange.glb"
+        startY={-3}
+        speed={1.8}
+        scale={3}
+        delay={2}
       />
 
       <Environment preset="sunset" />
