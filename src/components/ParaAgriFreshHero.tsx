@@ -197,9 +197,9 @@ const ParaAgriFreshHero = () => {
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Fresh Green Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--agri-green-start))] to-[hsl(var(--agri-green-end))]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+      {/* Light Green Background */}
+      <div className="absolute inset-0 bg-[hsl(150,50%,85%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[hsl(150,50%,80%)]" />
 
       {/* 3D Canvas */}
       <div className="absolute inset-0">
