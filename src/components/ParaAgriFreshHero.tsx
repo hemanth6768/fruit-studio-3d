@@ -202,9 +202,9 @@ const ParaAgriFreshHero = () => {
           }`}
         >
           <h1 
-            className="text-6xl md:text-8xl font-bold text-primary mb-4"
+            className="text-6xl md:text-8xl font-bold text-foreground mb-4"
             style={{
-              textShadow: '0 0 30px hsl(var(--primary) / 0.4)',
+              textShadow: '0 0 20px hsl(var(--foreground) / 0.2)',
               letterSpacing: '0.05em'
             }}
           >
