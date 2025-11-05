@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const Contact = () => {
   return (
-    <section id="contact" className="py-32 relative backdrop-blur-sm bg-background/70">
+    <section id="contact" className="py-32 relative bg-background">
       <div className="container mx-auto px-4 max-w-2xl">
         <h2 className="text-5xl md:text-6xl font-bold text-center mb-4 text-primary">
           Get in Touch

@@ -61,7 +61,7 @@ const FruitShowcase = () => {
   };
 
   return (
-    <section id="products" className="min-h-screen py-20 relative backdrop-blur-sm bg-background/60">
+    <section id="products" className="min-h-screen py-20 relative bg-background">
       <div className="container mx-auto px-4">
         <h2 
           className={`text-5xl md:text-6xl font-bold text-center mb-16 text-primary transition-all duration-700 ${

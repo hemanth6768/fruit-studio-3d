@@ -20,10 +20,8 @@ const benefits = [
 
 const HealthBenefits = () => {
   return (
-    <section id="about" className="py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background backdrop-blur-sm" />
-      
-      <div className="container mx-auto px-4 relative z-10">
+    <section id="about" className="py-32 relative overflow-hidden bg-background">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-20">
           <h2 className="text-6xl md:text-7xl font-black mb-4">
             <span className="text-primary">DIVE</span>
@@ -40,7 +38,7 @@ const HealthBenefits = () => {
           {benefits.map((benefit, index) => (
             <div
               key={benefit.title}
-              className="p-8 rounded-2xl bg-card border border-border hover:border-primary transition-all hover:shadow-[0_0_30px_rgba(217,255,0,0.2)] animate-fade-in"
+              className="p-8 rounded-2xl bg-card border border-border hover:border-primary transition-all hover:shadow-lg animate-fade-in"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               <benefit.icon className="w-12 h-12 text-primary mb-6" />

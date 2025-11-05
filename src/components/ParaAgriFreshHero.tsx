@@ -86,27 +86,28 @@ const BackgroundFruit = ({ modelPath, position, orbitRadius, orbitSpeed }: Backg
   return <primitive ref={meshRef} object={scene.clone()} scale={1.2} />;
 };
 
-// Hero Orange - Prominent rotating orange near title coming towards user
-interface HeroOrangeProps {
+// Hero Fruit - Prominent rotating fruit near title
+interface HeroFruitProps {
+  modelPath: string;
   position: [number, number, number];
   scale: number;
   rotationSpeed: number;
   floatOffset: number;
 }
 
-const HeroOrange = ({ position, scale, rotationSpeed, floatOffset }: HeroOrangeProps) => {
+const HeroFruit = ({ modelPath, position, scale, rotationSpeed, floatOffset }: HeroFruitProps) => {
   const meshRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF('/models/orange.glb');
+  const { scene } = useGLTF(modelPath);
 
   useFrame((state) => {
     if (!meshRef.current) return;
 
     const time = state.clock.getElapsedTime();
     
-    // Continuous rotation towards user
-    meshRef.current.rotation.y += rotationSpeed; // Primary rotation
-    meshRef.current.rotation.x = Math.sin(time * 0.5 + floatOffset) * 0.25; // Dynamic tilt
-    meshRef.current.rotation.z = Math.cos(time * 0.4 + floatOffset) * 0.2; // Secondary wobble
+    // Continuous rotation
+    meshRef.current.rotation.y += rotationSpeed;
+    meshRef.current.rotation.x = Math.sin(time * 0.5 + floatOffset) * 0.25;
+    meshRef.current.rotation.z = Math.cos(time * 0.4 + floatOffset) * 0.2;
     
     // Gentle floating motion
     meshRef.current.position.y = position[1] + Math.sin(time * 0.8 + floatOffset) * 0.4;
@@ -121,48 +122,26 @@ const Scene = () => {
     <>
       <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={50} />
       
-      {/* Lighting setup for organic farm-fresh look */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
-      <directionalLight position={[-10, 5, -5]} intensity={0.8} color="#b8f0d4" />
-      <spotLight position={[0, 15, 0]} intensity={1.2} angle={0.6} penumbra={1} color="#ffffff" />
-      <pointLight position={[5, 0, 5]} intensity={0.6} color="#4ade80" />
+      {/* Clean lighting for fresh look */}
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1.2} castShadow />
+      <directionalLight position={[-10, 5, -5]} intensity={0.6} />
+      <pointLight position={[0, 5, 5]} intensity={0.5} />
       
-      {/* HERO ORANGES - Two prominent rotating oranges near title */}
-      <HeroOrange 
-        position={[-2.5, 0.5, 7]} 
+      {/* Apple and Orange near title */}
+      <HeroFruit 
+        modelPath="/models/apple.glb"
+        position={[-3, 0.5, 7]} 
         scale={5} 
-        rotationSpeed={0.018} 
+        rotationSpeed={0.015} 
         floatOffset={0}
       />
-      <HeroOrange 
-        position={[2.5, -0.5, 7.5]} 
+      <HeroFruit 
+        modelPath="/models/orange.glb"
+        position={[3, -0.5, 7.5]} 
         scale={5.5} 
-        rotationSpeed={0.015} 
+        rotationSpeed={0.018} 
         floatOffset={Math.PI}
-      />
-
-      {/* Flying fruits entering from different angles - background only */}
-      <FlyingFruit 
-        modelPath="/models/pear.glb" 
-        startPos={[15, -8, -8]} 
-        endPos={[4, -2, -3]} 
-        delay={1.0}
-        rotationAxis="y"
-      />
-
-      {/* Background slowly rotating fruits */}
-      <BackgroundFruit 
-        modelPath="/models/pear.glb" 
-        position={[-7, 4, -8]} 
-        orbitRadius={0.5}
-        orbitSpeed={0.2}
-      />
-      <BackgroundFruit 
-        modelPath="/models/pomegranate.glb" 
-        position={[0, 6, -12]} 
-        orbitRadius={0.4}
-        orbitSpeed={0.25}
       />
 
       <Environment preset="sunset" />
@@ -196,10 +175,9 @@ const ParaAgriFreshHero = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {/* Light Green Background */}
-      <div className="absolute inset-0 bg-[hsl(150,50%,85%)]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[hsl(150,50%,80%)]" />
+    <section className="relative h-screen w-full overflow-hidden bg-background">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-secondary/30" />
 
       {/* 3D Canvas */}
       <div className="absolute inset-0">
@@ -220,21 +198,21 @@ const ParaAgriFreshHero = () => {
           }`}
         >
           <h1 
-            className="text-6xl md:text-8xl font-bold text-white mb-4"
+            className="text-6xl md:text-8xl font-bold text-primary mb-4"
             style={{
-              textShadow: '0 0 20px rgba(52, 211, 153, 0.6), 0 0 40px rgba(52, 211, 153, 0.4), 0 0 60px rgba(52, 211, 153, 0.2)',
+              textShadow: '0 0 30px hsl(var(--primary) / 0.4)',
               letterSpacing: '0.05em'
             }}
           >
             PARA AGRI FRESH
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 font-light tracking-wide">
+          <p className="text-xl md:text-2xl text-foreground mb-8 font-light tracking-wide">
             Farm Fresh. Naturally Organic. Delivered Daily.
           </p>
           <Button 
             onClick={scrollToProducts}
             size="lg"
-            className="pointer-events-auto bg-white text-[hsl(var(--agri-green-start))] hover:bg-white/90 hover:scale-105 transition-all duration-300 shadow-xl"
+            className="pointer-events-auto hover:scale-105 transition-all duration-300"
           >
             Explore Our Fruits
           </Button>
@@ -243,8 +221,8 @@ const ParaAgriFreshHero = () => {
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/60 rounded-full flex justify-center pt-2">
-          <div className="w-1 h-3 bg-white/60 rounded-full" />
+        <div className="w-6 h-10 border-2 border-primary/60 rounded-full flex justify-center pt-2">
+          <div className="w-1 h-3 bg-primary/60 rounded-full" />
         </div>
       </div>
     </section>
