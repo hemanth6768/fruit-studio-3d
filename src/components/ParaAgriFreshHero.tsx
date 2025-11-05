@@ -86,16 +86,17 @@ const BackgroundFruit = ({ modelPath, position, orbitRadius, orbitSpeed }: Backg
   return <primitive ref={meshRef} object={scene.clone()} scale={1.2} />;
 };
 
-// Hero Fruit - Prominent rotating fruit near title
-interface HeroFruitProps {
+// Orbiting Fruit - Rotates around the title in 360 degrees
+interface OrbitingFruitProps {
   modelPath: string;
-  position: [number, number, number];
+  orbitRadius: number;
+  orbitSpeed: number;
+  startAngle: number;
   scale: number;
-  rotationSpeed: number;
-  floatOffset: number;
+  zPosition: number;
 }
 
-const HeroFruit = ({ modelPath, position, scale, rotationSpeed, floatOffset }: HeroFruitProps) => {
+const OrbitingFruit = ({ modelPath, orbitRadius, orbitSpeed, startAngle, scale, zPosition }: OrbitingFruitProps) => {
   const meshRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF(modelPath);
 
@@ -104,17 +105,18 @@ const HeroFruit = ({ modelPath, position, scale, rotationSpeed, floatOffset }: H
 
     const time = state.clock.getElapsedTime();
     
-    // Continuous rotation
-    meshRef.current.rotation.y += rotationSpeed;
-    meshRef.current.rotation.x = Math.sin(time * 0.5 + floatOffset) * 0.25;
-    meshRef.current.rotation.z = Math.cos(time * 0.4 + floatOffset) * 0.2;
+    // Orbital motion around center (where title is)
+    const angle = time * orbitSpeed + startAngle;
+    meshRef.current.position.x = Math.cos(angle) * orbitRadius;
+    meshRef.current.position.y = Math.sin(angle) * orbitRadius;
+    meshRef.current.position.z = zPosition;
     
-    // Gentle floating motion
-    meshRef.current.position.y = position[1] + Math.sin(time * 0.8 + floatOffset) * 0.4;
-    meshRef.current.position.x = position[0] + Math.sin(time * 0.6 + floatOffset) * 0.3;
+    // Rotate the fruit itself as it orbits
+    meshRef.current.rotation.y += 0.02;
+    meshRef.current.rotation.x = Math.sin(time * 0.5) * 0.2;
   });
 
-  return <primitive ref={meshRef} object={scene.clone()} scale={scale} position={[position[0], position[1], position[2]]} />;
+  return <primitive ref={meshRef} object={scene.clone()} scale={scale} />;
 };
 
 const Scene = () => {
@@ -128,20 +130,22 @@ const Scene = () => {
       <directionalLight position={[-10, 5, -5]} intensity={0.6} />
       <pointLight position={[0, 5, 5]} intensity={0.5} />
       
-      {/* Apple and Orange near title */}
-      <HeroFruit 
+      {/* Apple and Orange orbiting around title */}
+      <OrbitingFruit 
         modelPath="/models/apple.glb"
-        position={[-3, 0.5, 7]} 
-        scale={5} 
-        rotationSpeed={0.015} 
-        floatOffset={0}
+        orbitRadius={4}
+        orbitSpeed={0.3}
+        startAngle={0}
+        scale={5}
+        zPosition={7}
       />
-      <HeroFruit 
+      <OrbitingFruit 
         modelPath="/models/orange.glb"
-        position={[3, -0.5, 7.5]} 
-        scale={5.5} 
-        rotationSpeed={0.018} 
-        floatOffset={Math.PI}
+        orbitRadius={4}
+        orbitSpeed={0.3}
+        startAngle={Math.PI}
+        scale={5}
+        zPosition={7}
       />
 
       <Environment preset="sunset" />
